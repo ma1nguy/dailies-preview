@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256">
+  <style>.r{fill:#1d1b16}.d{fill:#c8372d}@media (prefers-color-scheme:dark){.r{fill:#f1ebdd}.d{fill:#e0503f}}</style>
+  <path class="r" d="M146.06 25.58A104 104 0 0 1 109.94 230.42L115.84 196.94A70 70 0 0 0 140.16 59.06Z M76 218.07A104 104 0 0 1 27.54 101.08L60.39 109.88A70 70 0 0 0 93 188.62Z M42.81 68.35A104 104 0 0 1 109.94 25.58L115.84 59.06A70 70 0 0 0 70.66 87.85Z"/>
+  <path class="d" d="M104.96 96H124.96A32 32 0 0 1 124.96 160H104.96Z"/>
+</svg>

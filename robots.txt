@@ -1,0 +1,3 @@
+# Private preview. Delete this file (or allow all) when the site goes public.
+User-agent: *
+Disallow: /

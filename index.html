@@ -1,0 +1,204 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Dailies</title>
+  <meta name="description" content="A shelf of daily online games, filterable by type, difficulty and length.">
+  <!-- Private preview: keep out of search results until the owner says the site is public. Remove this line and robots.txt at launch. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#e9d6f0">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="Dailies">
+  <meta property="og:description" content="A shelf of daily online games, filterable by type, difficulty and length.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='9' fill='%23dcc7ea'/%3E%3Ccircle cx='16' cy='16' r='9' fill='%23f9d56e' stroke='%233a1442' stroke-width='2.5'/%3E%3Ccircle cx='16' cy='16' r='3.2' fill='%233a1442'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caprasimo&family=Source+Sans+3:wght@400;600;700&display=swap" rel="stylesheet">
+  <!-- The five palette scripts only set the one word "Dailies", so each is cut down to those letters. -->
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Leckerli+One&family=Lobster&family=Kaushan+Script&family=Oleo+Script:wght@700&text=Dailes&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+  <script>
+    // Apply saved Tweaks before first paint so the page never flashes the default look.
+    try {
+      var look = JSON.parse(localStorage.getItem("dailies:look") || "{}");
+      for (var k in look) if (look[k] && look[k] !== "auto" && k !== "ink") document.documentElement.dataset[k] = look[k];
+    } catch (e) {}
+  </script>
+</head>
+<body>
+  <div class="frame">
+    <nav class="nav" aria-label="Dailies">
+      <span class="logo script">Dailies</span>
+      <p class="nav-date"><span id="today"></span><span class="nav-sep" aria-hidden="true"></span><span id="cardno"></span></p>
+      <button class="pill dark tweaks-toggle" id="tweaks-toggle" type="button" aria-expanded="false" aria-controls="tweaks">Tweaks</button>
+    </nav>
+
+    <header class="hero" id="hero">
+      <div class="hero-copy">
+        <h1>One shelf for every daily game.</h1>
+        <p class="sub">Pick what fits your mood and your minutes.</p>
+        <div class="btns">
+          <a class="pill yellow" href="#filters">Browse the shelf <span aria-hidden="true">&darr;</span></a>
+          <div class="progress" id="progress" aria-live="polite"></div>
+        </div>
+        <div class="btns more">
+          <div class="streak" id="streak">
+            <span class="week" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></span>
+            <span class="streak-text" aria-live="polite"><strong id="streak-n">0</strong>day streak<span class="sr" id="streak-sr"></span></span>
+          </div>
+        </div>
+        <span class="stamp big" aria-hidden="true">Card complete</span>
+      </div>
+
+      <div class="artwrap">
+        <section class="deck intro" id="deck" aria-roledescription="carousel" aria-label="A few games from the shelf" tabindex="0">
+          <div class="deck-stage" id="deck-stage"></div>
+        </section>
+        <div class="deck-ctl">
+          <button class="pill deck-btn" id="deck-prev" type="button" aria-label="Previous game">&larr;</button>
+          <p class="deck-count" id="deck-count" aria-live="polite"></p>
+          <button class="pill deck-btn" id="deck-next" type="button" aria-label="Next game">&rarr;</button>
+        </div>
+      </div>
+    </header>
+
+    <section class="favs" id="favs" aria-labelledby="favs-h">
+      <div class="tab-head"><h2 class="tab" id="favs-h">Your favorites</h2></div>
+      <div class="fav-list" id="fav-list"></div>
+      <p class="fav-none" id="fav-none">Star a game on the shelf or on its ticket and it waits for you here.</p>
+    </section>
+
+    <section class="cats" id="holes" aria-label="Punched today by type"></section>
+    <section class="cat-panel" id="cat-panel" aria-labelledby="cat-panel-title" hidden>
+      <div class="cat-panel-head">
+        <h2 id="cat-panel-title"></h2>
+        <button class="link" id="cat-close" type="button">Close</button>
+      </div>
+      <div class="fav-list" id="cat-panel-list"></div>
+    </section>
+    <p class="fine">Valid today only. Punches reset at your midnight and live in this browser.</p>
+
+    <div class="tools">
+      <div class="tool-bar">
+        <button class="pill tool-btn" id="pick-toggle" type="button" aria-expanded="false" aria-controls="pick">Pick for me</button>
+        <button class="pill tool-btn" id="sets-toggle" type="button" aria-expanded="false" aria-controls="sets">Plan your time</button>
+      </div>
+
+    <section class="pick" id="pick" aria-labelledby="pick-h" hidden>
+      <div class="pick-set">
+        <h2 class="sr" id="pick-h">Pick for me</h2>
+        <div class="group" role="group" aria-label="Mood">
+          <span class="group-label">Mood</span>
+          <div class="chips" id="pick-mood"></div>
+        </div>
+        <div class="group" role="group" aria-label="Time">
+          <span class="group-label">I have</span>
+          <div class="chips" id="pick-time"></div>
+        </div>
+        <div><button class="pill dark" id="pick-go" type="button">Pick a game</button></div>
+      </div>
+      <div class="pick-out" id="pick-out" aria-live="polite">
+        <p class="pick-none">Choose a mood and your minutes, then pick.</p>
+      </div>
+    </section>
+
+    <section class="pick sets" id="sets" aria-labelledby="sets-h" hidden>
+      <div class="pick-set">
+        <h2 class="sr" id="sets-h">Plan your time</h2>
+        <div class="group" role="group" aria-label="Minutes">
+          <span class="group-label">I have</span>
+          <div class="chips" id="sets-time"></div>
+        </div>
+        <div class="group" role="group" aria-label="Routines">
+          <span class="group-label">Or a routine</span>
+          <div class="chips" id="sets-routines"></div>
+        </div>
+      </div>
+      <div class="pick-out" id="sets-out" aria-live="polite"></div>
+    </section>
+    </div>
+
+    <div class="strip" aria-hidden="true"></div>
+
+    <section class="toolbar" aria-label="Search and sort">
+      <label class="field search">
+        <span class="lab">Search</span>
+        <input id="q" type="search" placeholder="Search games" autocomplete="off">
+      </label>
+      <label class="field sort">
+        <span class="lab">Sort by</span>
+        <select id="sort">
+          <option value="popular">Most popular</option>
+          <option value="easy">Easiest first</option>
+          <option value="hard">Hardest first</option>
+          <option value="short">Shortest first</option>
+          <option value="long">Longest first</option>
+          <option value="name">Name (A to Z)</option>
+          <option value="nameZ">Name (Z to A)</option>
+          <option value="new">Recently added</option>
+        </select>
+      </label>
+    </section>
+
+    <section class="filters" id="filters" aria-label="Filters"></section>
+
+    <div class="tear" role="separator" aria-label="The whole shelf"><span class="tear-rule"></span><span class="tear-label">The whole shelf</span></div>
+
+    <div class="resultbar">
+      <span id="count"></span>
+      <button class="link" id="clear" type="button" hidden>Clear filters</button>
+    </div>
+
+    <main class="grid" id="grid"></main>
+    <p class="empty" id="empty" hidden>No games match those filters. Try clearing one.</p>
+
+    <section class="vault" id="vault" aria-labelledby="vault-h">
+      <div class="tab-head"><h2 class="tab" id="vault-h">Your cards</h2></div>
+      <div class="vault-nav">
+        <button class="pill" id="vault-prev" type="button" aria-label="Previous month">&larr;</button>
+        <span class="vault-month" id="vault-month" aria-live="polite"></span>
+        <button class="pill" id="vault-next" type="button" aria-label="Next month">&rarr;</button>
+      </div>
+      <ol class="month" id="month"></ol>
+      <p class="vault-sum" id="vault-sum"></p>
+      <div class="vault-btns"><button class="pill" id="print-card" type="button">Print today's card</button></div>
+    </section>
+
+    <section class="sheet" id="sheet" aria-hidden="true"></section>
+  </div>
+
+
+  <aside class="tweaks" id="tweaks" aria-label="Tweaks" hidden>
+    <h2>Tweaks</h2>
+    <div class="tw" role="group" aria-label="Palette">
+      <span class="tw-lab">Palette</span>
+      <div class="seg">
+        <button type="button" data-tw="pal" data-v="gin"><i style="background:#dcc7ea;border-color:#3a1442"></i>Gin</button>
+        <button type="button" data-tw="pal" data-v="sweet"><i style="background:#f6c3d6;border-color:#1c2a6b"></i>Sweet shop</button>
+        <button type="button" data-tw="pal" data-v="cafe"><i style="background:#f7d97a;border-color:#3b1d12"></i>Corner cafe</button>
+        <button type="button" data-tw="pal" data-v="garden"><i style="background:#bfe3c9;border-color:#12392f"></i>Garden</button>
+        <button type="button" data-tw="pal" data-v="varsity"><i style="background:#eadfcb;border-color:#0f3f86"></i>Varsity</button>
+      </div>
+    </div>
+    <div class="tw" role="group" aria-label="Marks">
+      <span class="tw-lab">Marks</span>
+      <div class="seg">
+        <button type="button" data-tw="holes" data-v="shaped">Icons</button>
+        <button type="button" data-tw="holes" data-v="round">All round</button>
+      </div>
+    </div>
+    <div class="tw" role="group" aria-label="Theme">
+      <span class="tw-lab">Light</span>
+      <div class="seg">
+        <button type="button" data-tw="theme" data-v="auto">Auto</button>
+        <button type="button" data-tw="theme" data-v="light">Day</button>
+        <button type="button" data-tw="theme" data-v="dark">Night</button>
+      </div>
+    </div>
+  </aside>
+
+  <script src="games.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
