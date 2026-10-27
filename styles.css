@@ -6,7 +6,7 @@
   color-scheme: light dark;
 
   --display: "Caprasimo", "Cooper Black", Georgia, serif;
-  --script: "Pacifico", cursive;
+  --script: "Lobster", cursive; /* the wordmark is the Corner cafe lettering in every palette */
   --sans: "Source Sans 3", "Helvetica Neue", Arial, sans-serif;
 
   /* Raw palette, Gin by default. The five palettes below only override these. */
@@ -43,11 +43,10 @@
 :root[data-theme="light"] { color-scheme: light; }
 :root[data-theme="dark"] { color-scheme: dark; }
 
-:root[data-pal="sweet"] { --script: "Leckerli One", cursive; --p-stage: #f6c3d6; --p-mat: #fbdde8; --p-ink: #1c2a6b; --p-pop: #ff6f91; --p-pop2: #ff9db4; --p-btn: #ffe28a; --p-label: #fff7ea; --p-leaf: #3aa88a; --p-ice: #ffffff; }
-:root[data-pal="cafe"] { --script: "Lobster", cursive; --p-stage: #f7d97a; --p-mat: #fbe9b0; --p-ink: #3b1d12; --p-pop: #e8553a; --p-pop2: #f08a6a; --p-btn: #fff3c4; --p-label: #fff8e6; --p-leaf: #2f7f78; --p-ice: #fffaf0; --strip: repeating-linear-gradient(45deg, var(--ink) 0 6px, transparent 6px 14px); }
-:root[data-pal="garden"] { --script: "Kaushan Script", cursive; --p-stage: #bfe3c9; --p-mat: #def1e3; --p-ink: #12392f; --p-pop: #ff7f6b; --p-pop2: #ffa595; --p-btn: #ffe08a; --p-label: #f6f3e4; --p-leaf: #2f8f5b; --p-ice: #ffffff; --strip: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 24px 24px; }
-:root[data-pal="varsity"] { --script: "Oleo Script", cursive; --p-stage: #eadfcb; --p-mat: #f3ead8; --p-ink: #0f3f86; --p-pop: #d63a2f; --p-pop2: #e8685d; --p-btn: #f4c542; --p-label: #fbf6ea; --p-leaf: #0f3f86; --p-ice: #ffffff; --strip: repeating-linear-gradient(45deg, var(--ink) 0 6px, transparent 6px 14px); }
-:root[data-pal="gin"] { --script: "Pacifico", cursive; }
+:root[data-pal="sweet"] { --p-stage: #f6c3d6; --p-mat: #fbdde8; --p-ink: #1c2a6b; --p-pop: #ff6f91; --p-pop2: #ff9db4; --p-btn: #ffe28a; --p-label: #fff7ea; --p-leaf: #3aa88a; --p-ice: #ffffff; }
+:root[data-pal="cafe"] { --p-stage: #f7d97a; --p-mat: #fbe9b0; --p-ink: #3b1d12; --p-pop: #e8553a; --p-pop2: #f08a6a; --p-btn: #fff3c4; --p-label: #fff8e6; --p-leaf: #2f7f78; --p-ice: #fffaf0; --strip: repeating-linear-gradient(45deg, var(--ink) 0 6px, transparent 6px 14px); }
+:root[data-pal="garden"] { --p-stage: #bfe3c9; --p-mat: #def1e3; --p-ink: #12392f; --p-pop: #ff7f6b; --p-pop2: #ffa595; --p-btn: #ffe08a; --p-label: #f6f3e4; --p-leaf: #2f8f5b; --p-ice: #ffffff; --strip: conic-gradient(var(--ink) 25%, transparent 0 50%, var(--ink) 0 75%, transparent 0) 0 0 / 24px 24px; }
+:root[data-pal="varsity"] { --p-stage: #eadfcb; --p-mat: #f3ead8; --p-ink: #0f3f86; --p-pop: #d63a2f; --p-pop2: #e8685d; --p-btn: #f4c542; --p-label: #fbf6ea; --p-leaf: #0f3f86; --p-ice: #ffffff; --strip: repeating-linear-gradient(45deg, var(--ink) 0 6px, transparent 6px 14px); }
 
 /* One icon and one hue per category (the attribute is still called data-shape, after the shapes the categories started with).
    The fill keeps the same lightness and chroma on every hue so the six read as a set; all text on a fill is the dark ink.
@@ -256,7 +255,7 @@ h1 { margin: 0; max-width: 11ch; font: 400 clamp(46px, 7.4vw, 88px)/0.94 var(--d
 .fav.new { animation: rise-in 200ms var(--ease-out) backwards; }
 .fav-tile { position: relative; display: grid; place-items: center; width: 56px; height: 56px; border: 2px solid var(--p-ink); border-radius: 12px; background: var(--cat); cursor: pointer; }
 .fav-tile input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.fav-tile .punch { --d: 40px; border-width: 1.5px; transition: background-color 120ms ease, transform 160ms var(--ease-out); }
+.fav-tile .punch { --d: 40px; border-width: 1.5px; transition: background-color 120ms ease, transform 160ms var(--ease-out), translate 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
 .fav-tile:active .punch { transform: scale(0.92); }
 .fav-tile:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: 2px; }
 .fav-main { min-width: 0; }
@@ -471,9 +470,18 @@ select option { background: #fbf6ea; color: #1c1a17; }
 .serial { font: 400 22px/1 var(--display); font-variant-numeric: tabular-nums; }
 .serial small { margin-right: 3px; font: 700 11px/1 var(--sans); letter-spacing: 0.1em; }
 .tile input { position: absolute; inset: 0; width: 100%; height: 100%; margin: 0; opacity: 0; cursor: pointer; }
-.tile .punch { --d: 64px; transition: background-color 120ms ease, transform 160ms var(--ease-out); }
+.tile .punch { --d: 64px; transition: background-color 120ms ease, transform 160ms var(--ease-out), translate 160ms var(--ease-out), box-shadow 160ms var(--ease-out); }
 .tile:active .punch { transform: scale(0.92); }
 .tile:has(input:focus-visible) { outline: 3px solid var(--ink); outline-offset: -5px; }
+/* "Punch here": an open disc is ringed by a perforated circle. Hover or keyboard focus turns the ring once, lifts the disc on a hard
+   shadow and tips the icon, the same lift the cards use. Punched, the ring is gone. Nothing moves until the visitor does. */
+.tile .punch::before, .fav-tile .punch::before { content: ""; position: absolute; inset: -8px; border: 2px dashed color-mix(in srgb, var(--p-ink) 70%, transparent); border-radius: 50%; pointer-events: none; transition: transform 260ms var(--ease-out), opacity 120ms ease; }
+.fav-tile .punch::before { inset: -5px; border-width: 1.5px; }
+input:checked + .punch::before { opacity: 0; }
+.tile .hole, .fav-tile .hole { transition: background-color 120ms ease, rotate 200ms var(--ease-out); }
+:is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .punch { translate: 0 -3px; box-shadow: 0 3px 0 var(--p-ink); }
+:is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .punch::before { transform: rotate(60deg) scale(1.1); }
+:is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .hole { rotate: -10deg; }
 .tick-text { display: grid; font: 700 11px/1 var(--sans); letter-spacing: 0.12em; text-transform: uppercase; }
 .tick-text b { grid-area: 1 / 1; font-weight: 700; transition: opacity 120ms ease; }
 .tick-text .t-on, input:checked ~ .tick-text .t-off { opacity: 0; }
@@ -524,6 +532,9 @@ input:checked ~ .tick-text .t-on { opacity: 1; }
   .star[aria-pressed="false"]:hover { background: color-mix(in srgb, var(--ink) 10%, transparent); }
   .play:hover .arrow { transform: translate(2px, -2px); }
   .tile:hover .punch { background: color-mix(in oklab, var(--p-label) 80%, var(--cat)); }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .punch { translate: 0 -3px; box-shadow: 0 3px 0 var(--p-ink); }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .punch::before { transform: rotate(60deg) scale(1.1); }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .hole { rotate: -10deg; }
   input[type="search"]:hover, select:hover { background: color-mix(in oklab, var(--label) 82%, var(--btn)); }
 }
 input[type="search"]:focus { outline: 0; box-shadow: 3px 3px 0 var(--shade); }
@@ -643,6 +654,9 @@ select:focus-visible { outline-offset: 2px; }
   .play .arrow, .card h2 a, .pick-card h3 a, .set-name a, .fav-main h3 a { transition: none; }
   .play:hover .arrow { transform: none; }
   .card:hover, .cat:has(.cat-btn):not(.open):hover, .cat.open { translate: none; }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .punch, :is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .punch { translate: none; }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .punch::before, :is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .punch::before { transform: none; }
+  :is(.tile, .fav-tile):not(:has(input:checked)):hover .hole, :is(.tile, .fav-tile):not(:has(input:checked)):has(input:focus-visible) .hole { rotate: none; }
   .cat:has(.cat-btn):active { scale: none; }
   .cat-btn::after { transition: none; }
   .cat:has(.cat-btn):not(.open):hover .cat-btn::after { transform: none; }
